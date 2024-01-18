@@ -7,10 +7,14 @@ import About from "./pages/About";
 import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import Profile from "./pages/Profile";
+import Header from "./components/Header";
+//import Droupdown from "./components/Droupdown";
 
 export default function App() {
   return (
     <BrowserRouter>
+      <Header options={["Home", "About", "Log-in", "Profile"]} />
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
@@ -21,3 +25,4 @@ export default function App() {
     </BrowserRouter>
   );
 }
+//<Droupdown options={["Home", "About", "Log-in", "Profile"]} />
