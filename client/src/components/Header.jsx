@@ -1,10 +1,10 @@
 // eslint-disable-next-line no-unused-vars
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import { FiList } from "react-icons/fi";
+//import { FiList } from "react-icons/fi";
 import { Link } from "react-router-dom";
-export default function Header({ options = [{}] }) {
-  const [isExpanded, setIsExpanded] = useState(false);
+export default function Header() {
+  //const [isExpanded, setIsExpanded] = useState(false);
   return (
     <header className="bg-slate-200 shadow-md">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
@@ -23,27 +23,6 @@ export default function Header({ options = [{}] }) {
           />
           <FaSearch className="text-slate-600" />
         </form>
-        <div>
-          <button onClick={() => setIsExpanded(!isExpanded)}>
-            <FiList className="text-red" />
-          </button>
-          {isExpanded && (
-            <div className="bg-slate-200 shadow-md w-24">
-              <ul>
-                {options.map((options) => (
-                  <Link key={options} to={options}>
-                    <li
-                      className="hover:bg-blue-400 hover:text-white"
-                      key={options}
-                    >
-                      {options}
-                    </li>
-                  </Link>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
       </div>
     </header>
   );

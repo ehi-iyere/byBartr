@@ -8,12 +8,13 @@ import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import Profile from "./pages/Profile";
 import Header from "./components/Header";
-//import Droupdown from "./components/Droupdown";
+import Droupdown from "./components/Droupdown";
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Header options={["Home", "About", "Log-in", "Profile"]} />
+      <Droupdown options={["Home", "About", "Log-in", "Profile"]} />
+      <Header />
 
       <Routes>
         <Route path="/" element={<Home />} />
