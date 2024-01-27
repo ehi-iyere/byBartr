@@ -6,14 +6,12 @@ import userRouter from "./routes/user.routes.js";
 import authRouter from "./routes/auth.routes.js";
 dotenv.config();
 mongoose
-  .connect(process.env.Mongo, {
-    autoIndex: true, //make this also true
-  })
+  .connect(process.env.Mongo)
   .then(() => {
     console.log("connected to db");
   })
   .catch((error) => {
-    console.log("error");
+    console.log(error.message);
   });
 const app = express();
 app.use(express.json());
