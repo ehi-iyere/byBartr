@@ -4,3 +4,4 @@ export const test = (req, res) => {
   });
 };
 //Testing API routes
+// return a message saying the "Testing APU routes
