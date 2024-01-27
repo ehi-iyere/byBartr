@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
-import { isEmail } from "validator";
-
+import validator from "validator";
+const { isEmail } = validator;
+//TODO - fix mongo db uniqeness issue  in user schema
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -25,3 +26,4 @@ const userSchema = new mongoose.Schema(
 const User = mongoose.model("User", userSchema);
 
 export default User;
+//TODO - SOMETHI
