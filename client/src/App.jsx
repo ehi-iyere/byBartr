@@ -9,6 +9,7 @@ import Logout from "./pages/Logout";
 import Profile from "./pages/Profile";
 import Header from "./components/Header";
 import Droupdown from "./components/Droupdown";
+import SignUp from "./pages/SignUp";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/Profile" element={<Profile />} />
+        <Route path="/SignUp" element={<SignUp />} />
       </Routes>
     </BrowserRouter>
   );
