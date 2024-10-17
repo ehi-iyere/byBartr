@@ -1,0 +1,65 @@
+@use "../../styles/partials/colors.scss" as *;
+@use "../../styles/partials/mixins.scss" as *;
+
+.signup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &__form-container {
+    display: flex;
+    justify-content: center;
+    //margin: 1rem;
+    background-color: darkgray;
+    //border-radius: 4px;
+    width: 100%;
+    @include tablet {
+      border-radius: 4px;
+      width: 70%;
+      margin: 1rem;
+    }
+
+    @include desktop {
+      margin: 1rem 4rem;
+      //width: 50%;
+    }
+  }
+  &__form {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0;
+  }
+  &__error {
+    color: #d22d2d;
+  }
+  &__submit {
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__google {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  &__svg {
+    height: 30px;
+  }
+}
+
+input {
+  border: 1px solid #e1e1e1;
+  background-color: #f7f7f7;
+  border-radius: 4px;
+  margin: 0.5rem 0;
+  height: 36px;
+  color: #323232;
+  &:focus {
+    border: 1px solid #0095ff;
+    outline: #0095ff;
+  }
+  &::placeholder {
+    padding-left: 1rem;
+    color: #323232;
+  }
+}

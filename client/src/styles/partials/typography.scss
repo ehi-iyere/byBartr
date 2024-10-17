@@ -1,26 +1,23 @@
 // Avenir Normal
 @font-face {
-  font-family: "Avenir Next";
-  src: url("../../assets/font/Alternative files/AvenirNextLTPro.ttf")
-      format("truetype"),
-    url("../../assets/font/AvenirNextLTPro-Regular.otf") format("OpenType");
+  font-family: "DM Sans";
+  src: url("../../assets/font/DM_Sans/static/DMSans-Medium.ttf")
+    format("truetype");
   font-weight: 400;
 }
 
-//Avenir Demi
+//Avenir Bold
 
 @font-face {
-  font-family: "Avenir Next";
-  src: url("../../assets/font/Alternative files/AvenirNextLTProDemi.ttf")
-      format("truetype"),
-    url("../../assets/font/AvenirNextLTPro-Demi.otf") format("OpenType");
-  font-weight: 600;
-}
-//Avenir Bold
-@font-face {
-  font-family: "Avenir Next";
-  src: url("../../assets/font/Alternative files/AvenirNextLTProBold.ttf")
-      format("truetype"),
-    url("../../assets/font/AvenirNextLTPro-Bold.otf") format("OpenType");
+  font-family: "DM Sans";
+  src: url("../../assets/font/DM_Sans/static/DMSans-Bold.ttf");
   font-weight: 700;
 }
+// //Avenir Bold
+// @font-face {
+//   font-family: "Avenir Next";
+//   src: url("../../assets/font/Alternative files/AvenirNextLTProBold.ttf")
+//       format("truetype"),
+//     url("../../assets/font/AvenirNextLTPro-Bold.otf") format("OpenType");
+//   font-weight: 700;
+// }

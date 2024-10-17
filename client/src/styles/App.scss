@@ -1,0 +1,10 @@
+@use "./partials/mixins.scss" as *;
+@use "./partials/colors.scss" as *;
+@use "./partials/variables.scss" as *;
+
+* {
+  box-sizing: border-box;
+  font-family: "DM Sans";
+  margin: unset;
+  padding: unset;
+}
