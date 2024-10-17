@@ -35,6 +35,15 @@
       outline: none;
     }
   }
+
+  &__google {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  &__svg {
+    height: 30px;
+  }
 }
 
 input {
