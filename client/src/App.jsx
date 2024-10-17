@@ -6,6 +6,7 @@ import LogIn from "./components/Login/Login";
 import "./App.css";
 import Home from "./components/Home/Home";
 import { AuthProvider } from "./contexts/authContext";
+import SignUp from "./components/signup/SignUp";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -18,6 +19,7 @@ function App() {
             <Route path="/home" element={<Home />} />
 
             <Route path="/login" element={<LogIn />} />
+            <Route path="/signup" element={<SignUp />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>
