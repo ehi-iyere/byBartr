@@ -20,7 +20,7 @@ const Home = () => {
     <>
       {!userLoggedIn && <Navigate to={"/login"} replace={true} />}
       <div>
-        This is hime
+        This is hime {console.log(currentUser.accessToken)}
         <button type="submit " onClick={handleSubmit}>
           logout
         </button>
