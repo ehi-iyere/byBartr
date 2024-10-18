@@ -1,10 +1,9 @@
-import "./AuthButton.scss";
+import "./AuthButtons.scss";
 import { doSignOut } from "../../firebase/auth";
 import { Navigate, useNavigate } from "react-router-dom";
-const { userLoggedIn, currentUser } = useAuth();
-const navigate = useNavigate();
 
 export const LogoutButton = () => {
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("logging out");
@@ -27,6 +26,7 @@ export const LogoutButton = () => {
 };
 
 export const SignUpButton = () => {
+  const navigate = useNavigate();
   return (
     <>
       <main className="button signup">
@@ -34,7 +34,7 @@ export const SignUpButton = () => {
           className=""
           onClick={(e) => {
             e.preventDefault();
-            navigate("/singup");
+            navigate("/signup");
           }}
         >
           {" "}
@@ -46,6 +46,7 @@ export const SignUpButton = () => {
 };
 
 export const LogInButton = () => {
+  const navigate = useNavigate();
   return (
     <>
       <main className="button login">
