@@ -7,6 +7,7 @@ import "./styles/App.scss";
 import Home from "./components/Home/Home";
 import { AuthProvider } from "./contexts/authContext";
 import SignUp from "./components/signup/SignUp";
+import Header from "./components/Header/Header";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -15,6 +16,7 @@ function App() {
     <>
       <BrowserRouter>
         <AuthProvider>
+          <Header />
           <Routes>
             <Route path="/home" element={<Home />} />
 
