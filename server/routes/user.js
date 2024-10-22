@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 require("dotenv").config();
+const authorize = require("../middleware/userAuth");
 const userController = require("../controllers/user-controller");
 
 router.post("/signup", userController.createUser);
-router.post("/:id/edit", userController.updateProfile);
+router.put("/:id/edit", authorize, userController.updateProfile);
 router.get("/", userController.getUsers);
-router.get("/:id", userController.getUser);
+router.get("/:id", userController.getUserById);
 module.exports = router;
