@@ -19,12 +19,13 @@ const Home = () => {
   return (
     <>
       {!userLoggedIn && <Navigate to={"/login"} replace={true} />}
-      <div>
+      {/* <div>
         This is hime {console.log(currentUser.accessToken)}
         <button type="submit " onClick={handleSubmit}>
           logout
         </button>
-      </div>
+      </div> */}
+      <main className="home"></main>
     </>
   );
 };
