@@ -24,6 +24,7 @@ const LogIn = () => {
         setErrorMessage("Invalid Email or Password");
       }
     }
+    console.log(userLoggedIn);
   };
 
   const onGoogleSignIn = async (e) => {

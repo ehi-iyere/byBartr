@@ -8,6 +8,7 @@ app.use(cors());
 app.use(express.json());
 const { PORT } = process.env;
 const userRoutes = require("./routes/user");
+const projectRoutes = require("./routes/project");
 
 app.get("/", (req, res) => {
   res.json({
@@ -17,6 +18,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/user", userRoutes);
+app.use("/project", projectRoutes);
 app.listen(PORT, () => {
   console.log("Server is running on port " + PORT);
 });

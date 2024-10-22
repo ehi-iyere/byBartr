@@ -12,7 +12,31 @@ const {
   Filter,
 } = require("firebase-admin/firestore");
 const db = getFirestore();
+async function validateUser(id) {
+  try {
+    const data = await knex("users").where("id", id).first();
+    return true;
+  } catch (error) {
+    console.log(`No valid user ${error}`);
+    return false;
+  }
+}
+
 const createUser = async (req, res) => {
+  const regex = /[A-Z a-z]/g;
+  const validPronoun = /[A-Z a-z][/]{1}[A-Z a-z]/g;
+  if (
+    !req.body.email ||
+    !req.body.password ||
+    !regex.test(req.body.display_name) ||
+    !validPronoun.test(req.body.pronouns)
+  ) {
+    console.log(
+      regex.test(req.body.display_name),
+      validPronoun.test(req.body.pronouns)
+    );
+    return res.status(400).send("Invalid request");
+  }
   try {
     const userResponse = await firebase_admin.auth().createUser({
       email: req.body.email,
@@ -21,23 +45,33 @@ const createUser = async (req, res) => {
       emailVerified: false,
       disabled: false,
     });
+    //adding a user to firebase db
+    // const docRef = db.collection("users").doc(`${userResponse.uid}`);
+    // try {
+    //   await docRef.set({
+    // display_name: req.body.display_name,
+    // email: req.body.email,
+    // user_id: userResponse.uid,
+    // pronouns: req.body.pronouns,
+    // profile_pic: "",
+    // bio: "",
+    //   });
+    // } catch (error) {
+    //   res.json({ message: `Internal error because of ${error}` });
+    // }
 
-    const docRef = db.collection("users").doc(`${userResponse.uid}`);
-    try {
-      await docRef.set({
-        display_name: req.body.display_name,
-        email: req.body.email,
-        user_id: userResponse.uid,
-        pronouns: req.body.pronouns,
-        profile_pic: "",
-        bio: "",
-      });
-    } catch (error) {
-      res.json({ message: `Internal error because of ${error}` });
-    }
-    res.json(userResponse);
+    await knex("users").insert({
+      display_name: req.body.display_name,
+      email: req.body.email,
+      id: userResponse.uid,
+      pronouns: req.body.pronouns,
+    });
+    const user = await knex("users").where("id", userResponse.uid);
+    return res.status(200).json(user);
   } catch (error) {
-    res.json({ message: `Internal error because of ${error}` });
+    return res
+      .status(400)
+      .json({ message: `Internal error because of ${error}` });
   }
 };
 
@@ -61,17 +95,17 @@ const logInUser = async (req, res) => {
 const getUsers = async (req, res) => {
   try {
     const data = await knex("users");
-    const userInfo = data.map((d) => {
-      return {
-        id: d.id,
-        display_name: d.display_name,
-        email: d.email,
-        bio: d.bio,
-        profilePic: d.profilePic,
-        pronouns: d.pronouns,
-      };
-    });
-    return res.status(200).json(userInfo);
+    // const userInfo = data.map((d) => {
+    //   return {
+    //     id: d.id,
+    //     display_name: d.display_name,
+    //     email: d.email,
+    //     bio: d.bio,
+    //     profilePic: d.profilePic,
+    //     pronouns: d.pronouns,
+    //   };
+    // });
+    return res.status(200).json(data);
   } catch (error) {
     return res.status(400).send(`Error retrieving users: idk ${err}`);
   }
@@ -94,22 +128,22 @@ const getUsers = async (req, res) => {
 // };
 
 //get users knex
-const getUser = async (req, res) => {
+const getUserById = async (req, res) => {
   const { id } = req.params;
   try {
     const data = await knex("users").where("id", id).first();
-    console.log(data);
-    const userInfo = {
-      id: data.id,
-      display_name: data.display_name,
-      email: data.email,
-      bio: data.bio,
-      profilePic: data.profilePic,
-      pronouns: data.pronouns,
-    };
-    console.log(userInfo, id);
+    // console.log(data);
+    // const userInfo = {
+    //   id: data.id,
+    //   display_name: data.display_name,
+    //   email: data.email,
+    //   bio: data.bio,
+    //   profilePic: data.profilePic,
+    //   pronouns: data.pronouns,
+    // };
+    // console.log(userInfo, id);
 
-    return res.status(200).json(userInfo);
+    return res.status(200).json(data);
   } catch (error) {
     return res.status(400).send(`Error retrieving users: idk ${err}`);
   }
@@ -162,60 +196,38 @@ const getUser = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   const { id } = req.params;
+  const regex = /[A-Z]/g;
+  const validPronoun = /[A-Z a-z][/]{1}[A-Z a-z]/g;
+  let edit = {};
+  // if (!validateUser(id)) {
+  //   return res.status(404).send(`No such user`);
+  // }
+  if (validPronoun.test(req.body.pronouns)) {
+    edit = { ...edit, pronouns: req.body.pronouns };
+  }
+  if (regex.test(req.body.display_name)) {
+    edit = { ...edit, display_name: req.body.req.body.display_name };
+  }
+  if (req.body.bio.match(regex)) {
+    edit = { ...edit, bio: req.body.bio };
+  }
   try {
-    //TODO include input validation function
-    if (req.pronouns) {
-      // and pronoun input is valid
-      try {
-        await knex("users").where("id", id).update("pronouns", req.pronouns);
-      } catch (error) {
-        return res.status(400).send(`Error updating pronouns ${err}`);
-      }
-    }
-    if (req.display_name) {
-      // and pronoun input is valid
-      try {
-        await knex("users")
-          .where("id", id)
-          .update("display_name", req.display_name);
-      } catch (error) {
-        return res.status(400).send(`Error updating display_name ${err}`);
-      }
-    }
-    if (req.profilePic) {
-      // and pronoun input is valid
-      try {
-        await knex("users")
-          .where("id", id)
-          .update("profilePic", req.profilePic);
-      } catch (error) {
-        return res.status(400).send(`Error updating profilePic ${err}`);
-      }
-    }
-    if (req.bio) {
-      // and pronoun input is valid
-      try {
-        await knex("users").where("id", id).update("bio", req.bio);
-      } catch (error) {
-        return res.status(400).send(`Error updating bio ${err}`);
-      }
-    }
-    const user = await knex("users").where("id", data.user_id).first();
-    if (!user) {
-      return res.status(404).send(`No such user`);
-    }
-    const { id, display_name, email, bio, profilePic, pronouns } = user;
-    const userInfo = {
-      id: id,
-      display_name: display_name,
-      email: email,
-      bio: bio,
-      profilePic: profilePic,
-      pronouns: pronouns,
-    };
-    return res.status(200).json(userInfo);
+    await knex("users").where("id", id).update(edit);
+
+    const user = await knex("users").where("id", id).first();
+
+    // const { id, display_name, email, bio, profilePic, pronouns } = user;
+    // const userInfo = {
+    //   id: id,
+    //   display_name: display_name,
+    //   email: email,
+    //   bio: bio,
+    //   profilePic: profilePic,
+    //   pronouns: pronouns,
+    // };
+    return res.status(200).json(user);
   } catch (error) {
-    return res.status(400).send(`Error retrieving users: idk ${err}`);
+    return res.status(400).send(`Error retrieving users:  ${error}`);
   }
 };
 
@@ -252,7 +264,7 @@ module.exports = {
   createUser,
   logInUser,
   getUsers,
-  getUser,
+  getUserById,
   updateProfile,
   upload,
 };
