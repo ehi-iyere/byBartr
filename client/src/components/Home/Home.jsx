@@ -2,9 +2,10 @@ import "./Home.scss";
 import { useAuth } from "../../contexts/authContext";
 import { doSignOut } from "../../firebase/auth";
 import { useNavigate } from "react-router-dom";
-const Home = () => {
+import Projects from "../../Pages/Projects/Projects";
+const Home = ({ projects }) => {
   const { userLoggedIn, currentUser } = useAuth();
-  console.log(currentUser);
+
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +26,11 @@ const Home = () => {
           logout
         </button>
       </div> */}
-      <main className="home"></main>
+      <main className="home">
+        <div className="home__projects">
+          <Projects projects={projects} />
+        </div>
+      </main>
     </>
   );
 };

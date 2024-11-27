@@ -41,7 +41,7 @@ const createUser = async (req, res) => {
     const userResponse = await firebase_admin.auth().createUser({
       email: req.body.email,
       password: req.body.password,
-
+      displayName: req.body.display_name,
       emailVerified: false,
       disabled: false,
     });
@@ -61,6 +61,7 @@ const createUser = async (req, res) => {
     // }
 
     await knex("users").insert({
+    
       display_name: req.body.display_name,
       email: req.body.email,
       id: userResponse.uid,
@@ -132,20 +133,24 @@ const getUserById = async (req, res) => {
   const { id } = req.params;
   try {
     const data = await knex("users").where("id", id).first();
-    // console.log(data);
-    // const userInfo = {
-    //   id: data.id,
-    //   display_name: data.display_name,
-    //   email: data.email,
-    //   bio: data.bio,
-    //   profilePic: data.profilePic,
-    //   pronouns: data.pronouns,
-    // };
-    // console.log(userInfo, id);
+    
 
     return res.status(200).json(data);
   } catch (error) {
-    return res.status(400).send(`Error retrieving users: idk ${err}`);
+    return res.status(400).send(`Error retrieving users: idk ${error}`);
+  }
+};
+
+const getUserByName = async (req, res) => {
+  const { email } = req.params;
+  try {
+    const data = await knex("users").where("email", email).first();
+    const projects = await knex("projects").where("user_id", data.id);
+    
+
+    return res.status(200).json(data,projects);
+  } catch (error) {
+    return res.status(400).send(`Error retrieving users: idk ${error}`);
   }
 };
 
@@ -260,11 +265,22 @@ async function upload(req, res) {
     }
   } else res.send("No file uploaded !!");
 }
+const getProjectByUser = async (req, res) => {
+  const { user_id } = req.params;
+  //console.log(projectId);
+  try {
+    const data = await knex("projects").where("user_id", user_id).first();
+    return res.status(200).json(data);
+  } catch (error) {
+    return res.status(400).send(`Error retrieving users projects: ${error}`);
+  }
+};
 module.exports = {
   createUser,
   logInUser,
   getUsers,
   getUserById,
+  getUserByName,
   updateProfile,
   upload,
 };

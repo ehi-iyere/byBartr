@@ -99,7 +99,9 @@ const getProjectbyId = async (req, res) => {
   const { projectId } = req.params;
   console.log(projectId);
   try {
-    const data = await knex("projects").where("id", projectId).first();
+    //const data = await knex("projects").where("id", projectId).first();
+    const data = await knex("projects").join("users", "users.id", "=", "projects.user_id").select("projects.deadline","projects.description","projects.id","projects.thumbnail","projects.title","projects.user_id","users.bio","users.display_name","users.profilePic","users.pronouns",).where('projects.id', projectId).first()
+    //const data = await knex.select("*").from("projects").leftJoin("users","users.display_name")
     return res.status(200).json(data);
   } catch (error) {
     return res.status(400).send(`Error retrieving users projects: ${error}`);
@@ -109,7 +111,9 @@ const getProjectByUser = async (req, res) => {
   const { user_id } = req.params;
   //console.log(projectId);
   try {
-    const data = await knex("projects").where("user_id", user_id).first();
+    const data = await knex("projects").where("user_id", user_id);
+    //const userData = await knex("users").where("id", user_id).first();
+    //const {display_name , bio} = userData
     return res.status(200).json(data);
   } catch (error) {
     return res.status(400).send(`Error retrieving users projects: ${error}`);

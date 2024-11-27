@@ -1,0 +1,65 @@
+@use "../../styles/partials/colors.scss"as *;
+@use "../../styles/partials/mixins.scss"as *;
+
+.project {
+    display: flex;
+
+    flex-direction: column;
+    margin: 1rem;
+    overflow: hidden;
+
+    @include tablet {
+        margin: 1rem 2rem;
+    }
+
+    @include desktop {
+        margin: 1rem 4rem;
+    }
+
+    &__title {
+        color: black;
+    }
+
+    &__detail {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__cover {
+        height: 250px;
+        width: 100%;
+        background-color: black;
+        background-position: center;
+        /* Center the image */
+        background-repeat: no-repeat;
+        /* Do not repeat the image */
+        background-size: cover;
+    }
+
+    &__textbox {}
+
+    &__descrip {
+        color: black;
+        word-wrap: break-word;
+    }
+
+    &__duedate {
+        color: black;
+    }
+
+    &__heading {
+        color: grey;
+        font-size: 13px;
+        font-weight: 600;
+        padding-top: 1rem;
+    }
+
+    &__buttons {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__button {
+        margin: 1rem 0;
+    }
+}
