@@ -47,7 +47,7 @@ function App() {
           <Header setToken={setToken} />
           <Hero />
           <Routes>
-            <Route path="/home" element={<Home projects={projects} />} />
+            <Route path="/" element={<Home projects={projects} />} />
 
             <Route path="/login" element={<LogIn token={token} setToken={setToken} />} />
             <Route path="/signup" element={<SignUp />} />

@@ -1,5 +1,5 @@
-@use "../../styles/partials/colors.scss"as *;
-@use "../../styles/partials/mixins.scss"as *;
+@use "../../styles/partials/colors.scss" as *;
+@use "../../styles/partials/mixins.scss" as *;
 
 .header {
   display: inline-flex;
@@ -20,7 +20,7 @@
     display: flex;
     width: 50px;
     height: 50px;
-    align-items: center;
+    //align-items: center;
     //   background-color: $secondary-background;
     //   border-radius: 50%;
   }
@@ -30,8 +30,8 @@
     gap: 1rem;
   }
 
-  //   &__svg {
-  //     height: 50%;
-  //     width: 20%;
-  //   }
+  &__svg {
+    height: 100%;
+    width: 100%;
+  }
 }

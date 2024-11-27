@@ -32,7 +32,10 @@ const Header = ({ setToken }) => {
                 fill="#ED8895"
               />
             </svg> */}
-            <img className="header__svg" src={logo} alt="" />
+            <Link to="/" className="header__svg">
+              <img src={logo} alt="" />
+            </Link>
+
           </div>
         </section>
         <section className="header__left">
