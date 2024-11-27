@@ -2,13 +2,16 @@ import "./AuthButtons.scss";
 import { doSignOut } from "../../firebase/auth";
 import { Navigate, useNavigate } from "react-router-dom";
 
-export const LogoutButton = () => {
+export const LogoutButton = ({ setToken }) => {
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("logging out");
     try {
       await doSignOut();
+      localStorage.removeItem('token');
+      sessionStorage.removeItem('token');
+      setToken(null)
       navigate("/login");
     } catch (error) {
       console.log(error);
@@ -17,7 +20,7 @@ export const LogoutButton = () => {
   return (
     <>
       <main className="button logout">
-        <button className="" onClick={handleClick}>
+        <button className="button" onClick={handleSubmit}>
           Log Out
         </button>
       </main>
@@ -31,7 +34,7 @@ export const SignUpButton = () => {
     <>
       <main className="button signup">
         <button
-          className=""
+          className="button"
           onClick={(e) => {
             e.preventDefault();
             navigate("/signup");
@@ -51,7 +54,7 @@ export const LogInButton = () => {
     <>
       <main className="button login">
         <button
-          className=""
+          className="button"
           onClick={(e) => {
             e.preventDefault();
             navigate("/Login");
@@ -64,3 +67,16 @@ export const LogInButton = () => {
     </>
   );
 };
+
+export const profileButton = () => {
+  return (
+    <>
+      <main className="profile">
+        <Link to="/profile" className="profile__button">
+
+
+        </Link>
+      </main>
+    </>
+  )
+}

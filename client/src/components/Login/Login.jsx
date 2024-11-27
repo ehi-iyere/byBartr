@@ -1,30 +1,42 @@
 import "./Login.scss";
 import { useAuth } from "../../contexts/authContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   doSignInWithEmailAndPassword,
   doSignInWithGoogle,
 } from "../../firebase/auth";
 import { Navigate } from "react-router-dom";
 
-const LogIn = () => {
+const LogIn = ({ token, setToken }) => {
+
   const { userLoggedIn } = useAuth();
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [password, setPassword] = useState("");
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [rememberMe, setRememberMe] = useState(false)
   console.log(email, password);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isSigningIn) {
       setIsSigningIn(true);
       try {
-        await doSignInWithEmailAndPassword(email, password);
+        const resp = await doSignInWithEmailAndPassword(email, password)
+        setToken(resp._tokenResponse.idToken
+        )
+        if (rememberMe) {
+          localStorage.setItem('token', token);
+        } else {
+          sessionStorage.setItem('token', token);
+        }
       } catch (error) {
         setErrorMessage("Invalid Email or Password");
       }
     }
-    console.log(userLoggedIn);
+
+    console.log(userLoggedIn.accessToken, token);
   };
 
   const onGoogleSignIn = async (e) => {
@@ -38,48 +50,60 @@ const LogIn = () => {
       }
     }
   };
+
+  useEffect(() => { }, [token])
   return (
     <>
       {userLoggedIn && <Navigate to={"/home"} replace={true} />}
       <div className="login">
         <div className="login__form-container">
           <form action="submit" className="login__form" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="username"
-              className="login_username"
-              placeholder="Username"
-              value={email}
-              onChange={(e) => {
-                setErrorMessage("");
-                setEmail(e.target.value);
-              }}
-            />
-            <input
-              type="password"
-              name="password"
-              className="login_password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => {
-                setErrorMessage("");
-                setPassword(e.target.value);
-              }}
-            />
-            {errorMessage && (
-              <span className="text-red-600 font-bold">{errorMessage}</span>
-            )}
+            <div className="login__input-container">
+              <label htmlFor="email">e-mail</label>
+              <input
+                type="text"
+                id="email"
+                name="email"
+                className="login__input login__input--email"
+                placeholder="email"
+                value={email}
+                onChange={(e) => {
+                  setEmailError("");
+                  setEmail(e.target.value);
+                }}
+              />
+              {emailError && (
+                <span className="login__input-error">{emailError}</span>
+              )}
+            </div>
+            <div className="login__input-container">
+              <label htmlFor="password">password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                className="login__input login__input--password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => {
+                  setPasswordError("");
+                  setPassword(e.target.value);
+                }}
+              />
+              {passwordError && (
+                <span className="signup__input-error">{passwordError}</span>
+              )}
+            </div>
             <button className="login__submit">Login</button>
             <button
               disabled={isSigningIn}
               onClick={(e) => {
                 onGoogleSignIn(e);
               }}
-              className={`login__google ${
-                isSigningIn
-                  ? "cursor-not-allowed"
-                  : "hover:bg-gray-100 transition duration-300 active:bg-gray-100"
-              }`}
+              className={`login__google ${isSigningIn
+                ? "cursor-not-allowed"
+                : "hover:bg-gray-100 transition duration-300 active:bg-gray-100"
+                }`}
             >
               <svg
                 className="login__svg"

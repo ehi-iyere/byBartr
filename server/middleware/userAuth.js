@@ -9,7 +9,7 @@ const firebase_admin = require("firebase-admin"); //firebase admin
 const authorize = async (req, res, next) => {
   const token = req.headers.authorize.split(" ")[1];
   let { id } = req.params;
-  //console.log(id);
+  //console.log(token);
   if (!id) id = req.headers.id;
   //console.log(id);
   try {

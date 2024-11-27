@@ -1,10 +1,16 @@
 import "./SignUp.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/authContext";
 import { doCreatUserWithEmailAndPassword } from "../../firebase/auth";
+import axios from "axios"
+import { async } from "@firebase/util";
 const SignUp = () => {
+  const navigate = useNavigate();
   const { userLoggedIn } = useAuth();
+  const [username, setUsername] = useState("");
+  const [pronouns, setPronouns] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -34,8 +40,17 @@ const SignUp = () => {
         setComfirmPError("Password must match");
       } else {
         try {
-          await doCreatUserWithEmailAndPassword(email, password);
-          setIsRegistering(true);
+          // await doCreatUserWithEmailAndPassword(email, password);
+          // setIsRegistering(true);
+          let data = {
+            display_name: username,
+            pronouns: pronouns,
+            //name: e.target.name.value,
+            email: email,
+            password: password,
+          };
+          await axios.post(`${import.meta.env.VITE_BASEURL}user/signup`, data);
+          navigate("/login");
         } catch (error) {
           console.log(error, error.message);
           setComfirmPError(error.message);
@@ -43,54 +58,118 @@ const SignUp = () => {
       }
     }
   };
+
+
+  useEffect(() => { }, [])
   return (
     <>
       {userLoggedIn && <Navigate to={"/home"} replace={true} />}
       <main className="signup">
-        <div className="login__form-container">
-          <form action="submit" className="login__form" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="username"
-              className="login_username"
-              placeholder="Username"
-              value={email}
-              onChange={(e) => {
-                setEmailError("");
-                setEmail(e.target.value);
-              }}
-            />
-            {emailError && (
-              <span className="text-red-600 font-bold">{emailError}</span>
-            )}
-            <input
-              type="password"
-              name="password"
-              className="signup_password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => {
-                setPasswordError("");
-                setPassword(e.target.value);
-              }}
-            />
-            {passwordError && (
-              <span className="text-red-600 font-bold">{passwordError}</span>
-            )}
-            <input
-              type="password"
-              name="confirmpassword"
-              className="signup_password"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => {
-                setComfirmPError("");
-                setConfirmPassword(e.target.value);
-              }}
-            />
-            {confirmPError && (
-              <span className="text-red-600 font-bold">{confirmPError}</span>
-            )}
+        <div className="signup__form-container">
+          <h3 className="signup__formtext signup__formtext--title ">Sign Up</h3>
+          <div className="signup__formtext signup__formtext--body">Already have an account? {"   "}
+            <Link
+              to={"/login"}
+              className="signup__formtext signup__formtext--link"
+            >
+              Log In
+            </Link></div>
+          <form action="submit" className="signup__form" onSubmit={handleSubmit}>
+            <div className="signup__input-container">
+              <label htmlFor="username">username</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                className="signup__input signup__input--username"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                }}
+              />
+            </div>
+            <div className="signup__input-container signup__input-container--pronouns">
+              <label htmlFor="pronouns" className="signup__input-lable signup__input-lable--pronouns">pronouns</label>
+              {/* <input
+                type="text"
+                id="pronouns"
+                name="pronouns"
+                className="signup__input signup__input--pronouns"
+                placeholder="He/Him She/Her They/Them"
+                value={pronouns}
+                onChange={(e) => {
+                  setPronouns(e.target.value);
+                }}
+              /> */}
+              <label htmlFor="he/him" className="signup__pronouns signup__pronouns--he/him">he/him  <input type="radio" name="pronouns-he" id="he/him" value="he/him" className="signup__input signup__input--pronouns" checked={
+                pronouns === "he/him"
+              } onChange={() => setPronouns("he/him")
+              } /></label>
+              <label htmlFor="she/her" className="signup__pronouns signup__pronouns--she/her">she/her  <input type="radio" name="pronouns-she" id="she/her" value="she/her" className="signup__input signup__input--pronouns" checked={pronouns === "she/her"} onChange={() => setPronouns("she/her")} /></label>
+              <label htmlFor="they/them" className="signup__pronouns signup__pronouns--they/them">they/them  <input type="radio" name="pronouns-they" id="they/them" value="they/them" className="signup__input signup__input--pronouns" checked={pronouns === "they/them"} onChange={() => setPronouns("they/them")} /></label>
+
+            </div>
+            <div className="signup__input-container">
+              <label htmlFor="email">e-mail</label>
+              <input
+                type="text"
+                id="email"
+                name="email"
+                className="signup__input signup__input--email"
+                placeholder="email"
+                value={email}
+                onChange={(e) => {
+                  setEmailError("");
+                  setEmail(e.target.value);
+                }}
+              />
+              {emailError && (
+                <span className="signup__input-error">{emailError}</span>
+              )}
+            </div>
+            <div className="signup__input-container">
+              <label htmlFor="password">password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                className="signup__input signup__input--password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => {
+                  setPasswordError("");
+                  setPassword(e.target.value);
+                }}
+              />
+              {passwordError && (
+                <span className="signup__input-error">{passwordError}</span>
+              )}
+            </div>
+            <div className="signup__input-container">
+              <label htmlFor="confirmPassword">confirm password</label>
+              <input
+                id="confimPassword"
+                type="password"
+                name="confirmpassword"
+                className="signup__input signup__input--password-confirm"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => {
+                  setComfirmPError("");
+                  setConfirmPassword(e.target.value);
+                }}
+              />
+              {confirmPError && (
+                <span className="signup__input-error">{confirmPError}</span>
+              )}
+            </div>
+
+
+
+
+
+
             <button
               className="signup__submit"
               type="submit"
@@ -98,15 +177,7 @@ const SignUp = () => {
             >
               {isRegistering ? "Signing Up..." : "Sign Up"}
             </button>
-            <div className="text-sm text-center">
-              Already have an account? {"   "}
-              <Link
-                to={"/login"}
-                className="text-center text-sm hover:underline font-bold"
-              >
-                Log In
-              </Link>
-            </div>
+
           </form>
         </div>
       </main>

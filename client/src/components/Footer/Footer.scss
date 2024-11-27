@@ -1,0 +1,35 @@
+@use "../../styles/partials/colors.scss"as *;
+@use "../../styles/partials/mixins.scss"as *;
+
+.footer {
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    padding: .5rem 1rem;
+    background-color: $secondary-background;
+    height: max-content;
+
+    &__logo {
+        font-size: 1rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 120%;
+        /* 1.2rem */
+        letter-spacing: -0.03rem;
+        color: $highlight;
+        text-decoration: none;
+
+    }
+
+    &__cg {
+        font-size: 1rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 121.5%;
+        /* 1.215rem */
+        letter-spacing: -0.03rem;
+        text-decoration-line: underline;
+        color: $highlight;
+    }
+}
